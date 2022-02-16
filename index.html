@@ -15,6 +15,12 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <!-- My CSS
     <link rel="stylesheet" href="style.css"> -->
+    <style>
+        input.error{
+            box-shadow: 0 0 0 0.2rem rgba(255, 0, 0, 0.25) !important;
+            border: 1px solid #ced4da !important;
+        }
+    </style>
     <!-- JQuery CDN -->
     <script src="https://code.jquery.com/jquery-3.5.0.js"></script>
     <!--plugin validate -->
@@ -49,15 +55,21 @@
                             </div>
                         </div>
 
+                        <div class="form-group">
+                            <label for="inputEmail">Email</label>
+                            <input type="email" class="form-control" name="email" id="inputEmail" required>
+                            <span class="text-danger small"></span>                                
+                        </div>
+
                         <div class="form-row">
-                            <div class="form-group col-md-6">
-                                <label for="inputEmail">Email</label>
-                                <input type="email" class="form-control" name="email" id="inputEmail" required>
-                                <span class="text-danger small"></span>                                
-                            </div>
                             <div class="form-group col-md-6">
                                 <label for="inputPassword">Password</label>
                                 <input type="password" class="form-control" name="pass" id="inputPassword" required>
+                                <span class="text-danger small"></span>                            
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label for="inputPassword2">Confirm Password</label>
+                                <input type="password" class="form-control" name="pass2" id="inputPassword2" required>
                                 <span class="text-danger small"></span>                            
                             </div>
                         </div>
@@ -99,12 +111,15 @@
     <script>
         var emRegEx=/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
         var pwRegEx=/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9])(?!.*\s).{8,15}$/;
+        
         $.validator.methods.email = function( value, element ) {
             return this.optional( element ) || emRegEx.test( value );
         }
+
         $.validator.methods.password = function( value, element ) {
             return this.optional( element ) || pwRegEx.test( value );
         }
+
         $("#myForm").validate({
             rules: {
                 fname: "required",
@@ -117,7 +132,11 @@
                 pass:{
                     required: true,
                     // regex: /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9])(?!.*\s).{8,15}$/
+                },
+                pass2 : {
+                    equalTo : "#inputPassword"
                 }
+                
             },
             messages: {
                 name: "Please specify your name",
@@ -126,6 +145,9 @@
                 },
                 pass: {
                     password : "Password format: At least one of each (small letter, capital letter, symbols, numbers)"
+                },
+                pass2 : {
+                    password: "Password not matched"
                 }
             },
             errorPlacement: function(error, element) {
@@ -136,6 +158,7 @@
         });
 
 
+        // Confirm Password checking:
 
 
 
