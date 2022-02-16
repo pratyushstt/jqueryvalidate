@@ -32,53 +32,57 @@
     <div class="container bg-white p-2">
         <div class="row">
             <div class="col-11 mx-auto">
-                <form class="cmxform" id="myForm" method="get" action="">
+                <form method="post" class="cmxform" id="myForm" method="get" action="">
                     <fieldset>
                         <legend>Please provide your name, email address (won't be published) and a comment</legend>
 
                         <div class="form-row">
                             <div class="form-group col-md-6">
-                                <label for="inputFname">First Name&nbsp;<span class="text-danger small"></span></label>
+                                <label for="inputFname">First Name</label>
                                 <input type="text" class="form-control" name="fname" id="inputFname" required>
-                                
+                                <span class="text-danger small"></span>
                             </div>
                             <div class="form-group col-md-6">
-                                <label for="inputLname">Last Name&nbsp;<span class="text-danger small"></span></label>
+                                <label for="inputLname">Last Name</label>
                                 <input type="text" class="form-control" name="lname" id="inputLname" required>
-                            
+                                <span class="text-danger small"></span>                            
                             </div>
                         </div>
 
                         <div class="form-row">
                             <div class="form-group col-md-6">
-                                <label for="inputEmail">Email&nbsp;<span class="text-danger small"></span></label>
+                                <label for="inputEmail">Email</label>
                                 <input type="email" class="form-control" name="email" id="inputEmail" required>
-                                
+                                <span class="text-danger small"></span>                                
                             </div>
                             <div class="form-group col-md-6">
-                                <label for="inputPassword">Password&nbsp;<span class="text-danger small"></span></label>
-                                <input type="password" class="form-control" name="pass" id="inputPassword" minlength="8" required>
-                            
+                                <label for="inputPassword">Password</label>
+                                <input type="password" class="form-control" name="pass" id="inputPassword" required>
+                                <span class="text-danger small"></span>                            
                             </div>
                         </div>
 
                         <div class="form-group">
-                            <label for="inputAddress">Address&nbsp;<span class="text-danger small"></span></label>
+                            <label for="inputAddress">Address</label>
                             <input type="text" class="form-control" id="inputAddress" name="addr" placeholder="1234 Main St" required>
+                            <span class="text-danger small"></span>
                         </div>
 
                         <div class="form-row">
-                            <div class="form-group col-md-6">
-                                <label for="inputCity">City&nbsp;<span class="text-danger small"></span></label>
+                            <div class="form-group col-md-5">
+                                <label for="inputCity">City</label>
                                 <input type="text" class="form-control" id="inputCity" name="cty" required>
+                                <span class="text-danger small"></span>
                             </div>
                             <div class="form-group col-md-4">
-                                <label for="inputState">State&nbsp;<span class="text-danger small"></span></label>
+                                <label for="inputState">State</label>
                                 <input type="text" class="form-control" id="inputState" name="st" required>
+                                <span class="text-danger small"></span>
                             </div>
-                            <div class="form-group col-md-2">
-                                <label for="inputZip">Zip&nbsp;<span class="text-danger small"></span></label>
+                            <div class="form-group col-md-3">
+                                <label for="inputZip">Zip</label>
                                 <input type="number" class="form-control" id="inputZip" name="zp" maxlength="6" minlength="6" required>
+                                <span class="text-danger small"></span>
                             </div>
                         </div>
                         
@@ -93,12 +97,59 @@
     </div>
     
     <script>
+        var emRegEx=/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+        var pwRegEx=/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9])(?!.*\s).{8,15}$/;
+        $.validator.methods.email = function( value, element ) {
+            return this.optional( element ) || emRegEx.test( value );
+        }
+        $.validator.methods.password = function( value, element ) {
+            return this.optional( element ) || pwRegEx.test( value );
+        }
         $("#myForm").validate({
+            rules: {
+                fname: "required",
+                lname: "required",
+                email: {
+                    required: true,
+                    email: true,
+                    // regex: /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/
+                },
+                pass:{
+                    required: true,
+                    // regex: /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9])(?!.*\s).{8,15}$/
+                }
+            },
+            messages: {
+                name: "Please specify your name",
+                email: {
+                    email : "Your email address must be in the format of name@domain.com"
+                },
+                pass: {
+                    password : "Password format: At least one of each (small letter, capital letter, symbols, numbers)"
+                }
+            },
             errorPlacement: function(error, element) {
-                error.appendTo( element[0].previousElementSibling.childNodes[1]);
+                error.appendTo(element.next("span"));
+                // error.appendTo( element[0].previousElementSibling.childNodes[1]);
                 // console.log(element[0].previousElementSibling.childNodes[1]);
             }
         });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        // Email Regex-> /^\b[A-Z0-9._%-]+@[A-Z0-9.-]+\.[A-Z]{2,4}\b$/i
+        // Password Regex-> "^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$";
     </script>
 
 </body>
